@@ -1,19 +1,102 @@
-// ConsoleApplication21.cpp : Este archivo contiene la función "main". La ejecución del programa comienza y termina ahí.
-//
-
 #include <iostream>
+#include <string>
+using namespace std;
 
-int main()
+class DynamicArray {
+private:
+    string* arr;  
+    int size;    
+    int capacity;  
+
+public:
+    
+    DynamicArray(int initial_capacity = 10) {
+        size = 0;
+        capacity = initial_capacity;
+        arr = new string[capacity];
+    }
+
+   
+    ~DynamicArray() {
+        delete[] arr;
+    }
+
+    bool insert(const string& newElement, int position) 
+    {
+        if (position < 0 || position > size) 
+        {
+            return false; 
+        }
+
+        if (size == capacity) 
+        {
+            capacity *= 2;
+            string* new_arr = new string[capacity];
+            for (int i = 0; i < size; i++) 
+            {
+                new_arr[i] = arr[i];
+            }
+            delete[] arr;
+            arr = new_arr;
+        }
+
+        for (int i = size; i > position; i--) 
+        {
+            arr[i] = arr[i - 1];
+        }
+
+        arr[position] = newElement;
+        size++;
+        return true;
+    }
+
+    bool remove(int position) 
+    {
+        if (position < 0 || position >= size) 
+        {
+            cout << "Posicio inexistent" << endl;
+            return false; 
+        }
+        string* newarray = new string[capacity];
+
+        for (int i = position; i < size - 1; i++) 
+        {
+            arr[i] = arr[i + 1];
+        }
+
+        size--;
+        return true;
+    }
+
+    int getSize() const 
+    {
+        return size;
+    }
+
+    void print() const 
+    {
+        for (int i = 0; i < size; i++) 
+        {
+            cout << arr[i] << " ";
+        }
+        cout << endl;
+    }
+};
+int main() 
 {
-    std::cout << "Hello World!\n";
+    string start[10];
+
+    DynamicArray arr(10);
+
+    arr.insert("bli", 0);
+    arr.print();
+    arr.insert("blo", 0);
+    arr.print();
+    arr.insert("blu", 0);
+    arr.print();
+  
+    arr.remove(2);
+    arr.print();
+
+    return 0;
 }
-
-// Ejecutar programa: Ctrl + F5 o menú Depurar > Iniciar sin depurar
-// Depurar programa: F5 o menú Depurar > Iniciar depuración
-
-// Sugerencias para primeros pasos: 1. Use la ventana del Explorador de soluciones para agregar y administrar archivos
-//   2. Use la ventana de Team Explorer para conectar con el control de código fuente
-//   3. Use la ventana de salida para ver la salida de compilación y otros mensajes
-//   4. Use la ventana Lista de errores para ver los errores
-//   5. Vaya a Proyecto > Agregar nuevo elemento para crear nuevos archivos de código, o a Proyecto > Agregar elemento existente para agregar archivos de código existentes al proyecto
-//   6. En el futuro, para volver a abrir este proyecto, vaya a Archivo > Abrir > Proyecto y seleccione el archivo .sln
